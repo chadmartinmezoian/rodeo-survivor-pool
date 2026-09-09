@@ -13,8 +13,8 @@
   --color-text: #f4f6f8;
   --color-accent: #d7191f;
   --color-accent-2: #3d7fd6;
-  --color-win: #ffffff;
-  --color-win-ink: #0b0d10;
+  --color-win: #1a7f42;
+  --color-win-ink: #ffffff;
   --color-divider: color-mix(in srgb, #f4f6f8 18%, transparent);
 
   --font-heading: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -268,8 +268,9 @@ textarea.input { min-height: 90px; resize: vertical; border-radius: 20px; }
   .grid-t { min-width: 0; border-spacing: 2px; }
   .grid-t td { padding: 6px 5px; }
   .grid-t td.n { min-width: 112px; font-size: 12px; }
-  .cityname { display: none; }
-  .codename { display: inline; }
+  .grid-t.compact .cityname { display: none; }
+  .grid-t.compact .codename { display: inline; }
+  .grid-t .cityname { font-size: 11px; letter-spacing: -.01em; }
   h1 { font-size: 34px; }
 
   /* Centered on phones — the page reads like a scoreboard, not a document.
