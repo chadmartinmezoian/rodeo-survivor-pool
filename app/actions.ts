@@ -196,7 +196,13 @@ export async function setWeekFinal(form: FormData) {
   const isFinal = String(form.get('isFinal')) === 'true';
   const db = supabaseAdmin();
   await db.from('weeks').update({ is_final: isFinal }).eq('week', week);
-  if (isFinal) await db.rpc('grade_week', { w: week });
+  if (isFinal) {
+    await db.rpc('grade_week', { w: week });
+  } else {
+    // Re-opening a week undoes the "didn't pick" losses it handed out, so an
+    // accidental close is fully reversible. Real picks stay put.
+    await db.from('picks').delete().eq('week', week).eq('team', 'NONE');
+  }
   revalidatePath('/admin');
   revalidatePath('/standings');
 }
