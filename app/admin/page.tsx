@@ -165,8 +165,33 @@ export default async function AdminPage({ searchParams }: { searchParams?: { sav
                   </form>
                 </td>
                 <td data-label="Status"><span className={'tag ' + STATUS_META[statusOf(p)].cls}>{STATUS_META[statusOf(p)].label}</span></td>
-                <td data-label="Entry">{p.entry_paid ? 'Paid' : <span className="text-muted">Owed</span>}</td>
-                <td data-label="Buyback">{p.buyback_status === 'used' ? (p.buyback_paid ? 'Paid' : 'Owed') : <span className="text-muted">{p.buyback_status}</span>}</td>
+                <td data-label="Entry">
+                  {/* Click to flip — no separate save step. */}
+                  <form action={togglePaid}>
+                    <input type="hidden" name="playerId" value={p.id} />
+                    <input type="hidden" name="field" value="entry_paid" />
+                    <input type="hidden" name="value" value={String(!p.entry_paid)} />
+                    <button className={'tag ' + (p.entry_paid ? 'tag-accent-2' : 'tag-outline')}
+                            style={{ cursor: 'pointer', border: 0, font: 'inherit' }}
+                            title="Click to change">
+                      {p.entry_paid ? 'Paid' : 'Owed'}
+                    </button>
+                  </form>
+                </td>
+                <td data-label="Buyback">
+                  {p.buyback_status === 'used' ? (
+                    <form action={togglePaid}>
+                      <input type="hidden" name="playerId" value={p.id} />
+                      <input type="hidden" name="field" value="buyback_paid" />
+                      <input type="hidden" name="value" value={String(!p.buyback_paid)} />
+                      <button className={'tag ' + (p.buyback_paid ? 'tag-accent-2' : 'tag-outline')}
+                              style={{ cursor: 'pointer', border: 0, font: 'inherit' }}
+                              title="Click to change">
+                        {p.buyback_paid ? 'Paid' : 'Owed'}
+                      </button>
+                    </form>
+                  ) : <span className="text-muted">{p.buyback_status}</span>}
+                </td>
                 <td data-label="PIN">
                   {p.has_pin ? (
                     <form action={resetPin}>
