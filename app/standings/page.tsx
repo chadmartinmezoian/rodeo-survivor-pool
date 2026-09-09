@@ -18,7 +18,7 @@ export default async function StandingsPage() {
   return (
     <div style={{ paddingTop: 26 }}>
       <p className="kicker" style={{ color: 'var(--color-accent-300)', margin: 0 }}>The sheet</p>
-      <h1 style={{ margin: '4px 0 18px' }}>Standings</h1>
+      <h1 style={{ margin: '4px 0 18px' }}>Picks Grid</h1>
 
       <div className="grid-cards cols-4" style={{ marginBottom: 24 }}>
         {[

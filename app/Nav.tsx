@@ -6,7 +6,7 @@ import { signOut } from './actions';
 
 const LINKS = [
   { href: '/', label: 'Make Pick' },
-  { href: '/standings', label: 'Standings' },
+  { href: '/standings', label: 'Picks Grid' },
   { href: '/my-picks', label: 'My Picks' },
   { href: '/rules', label: 'Rules' }
 ];

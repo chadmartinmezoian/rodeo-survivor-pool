@@ -155,8 +155,11 @@ textarea.input { min-height: 90px; resize: vertical; border-radius: 20px; }
 .tag-alive    { background: #2f8f4e; color: #fff; border-color: #2f8f4e; }
 
 /* — nav — */
-.nav { display: flex; align-items: center; gap: var(--space-6); padding: 22px 28px; }
-.nav a { padding: 8px 4px; }
+.nav { display: flex; align-items: center; gap: 14px; padding: 22px 28px; }
+/* Each link is its own pill — they need room around the text and between each
+   other, or the row reads as one solid block of caps. */
+.nav a { padding: 10px 18px; }
+.nav .signout { margin-left: 6px; }
 .nav-brand { font-family: var(--font-heading); font-weight: 800; font-size: 19px; letter-spacing: -.01em;
   text-transform: uppercase; margin-right: auto; padding-right: var(--space-4); }
 
@@ -178,9 +181,9 @@ textarea.input { min-height: 90px; resize: vertical; border-radius: 20px; }
 .stitch { border: 1px solid var(--color-accent-700); border-left: 4px solid var(--color-accent); border-radius: 6px; }
 .kicker { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
 .pagepad { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
-.navwrap { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.navwrap { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 .burger { display: none; }
-.whoami { display: flex; align-items: center; gap: 10px; }
+.whoami { display: flex; align-items: center; gap: 14px; margin-left: 18px; }
 .codename { display: none; }
 .mobonly { display: none; }
 
