@@ -1,13 +1,22 @@
 'use client';
-import { useActionState } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import { submitPick } from './actions';
+
+function SubmitButton({ locked, saved }: { locked: boolean; saved: string | null | undefined }) {
+  const { pending } = useFormStatus();
+  return (
+    <button className="btn btn-primary btn-block" style={{ minHeight: 50, fontSize: 16 }} disabled={locked || pending}>
+      {pending ? 'Saving…' : locked ? 'Closed' : saved ? 'Update pick' : 'Submit pick'}
+    </button>
+  );
+}
 
 type Option = { code: string; label: string };
 
 export default function PickForm({
   options, currentTeam, locked, week
 }: { options: Option[]; currentTeam: string | null; locked: boolean; week: number }) {
-  const [state, action, pending] = useActionState(submitPick, null as null | { error?: string; ok?: boolean; team?: string });
+  const [state, action] = useFormState(submitPick, null as null | { error?: string; ok?: boolean; team?: string });
   const saved = state?.ok ? state.team : currentTeam;
 
   return (
@@ -42,9 +51,7 @@ export default function PickForm({
 
       {state?.error && <p style={{ margin: 0, fontSize: 13, color: 'var(--color-accent-300)' }}>{state.error}</p>}
 
-      <button className="btn btn-primary btn-block" style={{ minHeight: 50, fontSize: 16 }} disabled={locked || pending}>
-        {pending ? 'Saving…' : locked ? 'Closed' : saved ? 'Update pick' : 'Submit pick'}
-      </button>
+      <SubmitButton locked={locked} saved={saved} />
       <p className="text-muted" style={{ margin: 0, fontSize: 12 }}>
         You can change your pick any time before the deadline.
       </p>

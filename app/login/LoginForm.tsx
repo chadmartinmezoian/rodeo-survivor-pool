@@ -1,11 +1,20 @@
 'use client';
-import { useActionState } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import { signIn } from '../actions';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button className="btn btn-primary btn-block" style={{ minHeight: 50, fontSize: 16 }} disabled={pending}>
+      {pending ? 'Checking…' : 'Sign in'}
+    </button>
+  );
+}
 
 type Entry = { id: string; name: string; has_pin: boolean };
 
 export default function LoginForm({ roster }: { roster: Entry[] }) {
-  const [state, action, pending] = useActionState(signIn, null as null | { error?: string });
+  const [state, action] = useFormState(signIn, null as null | { error?: string });
 
   return (
     <form action={action} className="card elev-md stack" style={{ gap: 14, marginTop: 20 }}>
@@ -38,9 +47,7 @@ export default function LoginForm({ roster }: { roster: Entry[] }) {
         <p style={{ margin: 0, fontSize: 13, color: 'var(--color-accent-300)' }}>{state.error}</p>
       )}
 
-      <button className="btn btn-primary btn-block" style={{ minHeight: 50, fontSize: 16 }} disabled={pending}>
-        {pending ? 'Checking…' : 'Sign in'}
-      </button>
+      <SubmitButton />
       <p className="text-muted" style={{ margin: 0, fontSize: 12 }}>
         You stay signed in on this device for the season.
       </p>
