@@ -8,7 +8,8 @@ import { TEAMS, teamName } from '@/lib/nfl';
 
 const COMMISSIONERS = ['Jason Bottoms', 'Chad Mezoian'];
 
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }: { searchParams?: { saved?: string } }) {
+  const saved = searchParams?.saved;
   const session = await getSession();
   if (!session) redirect('/login');
 
@@ -126,6 +127,14 @@ export default async function AdminPage() {
       <p className="text-muted" style={{ fontSize: 13, marginTop: -8 }}>
         For the guy who texted you his pick. Any player, any week.
       </p>
+      {saved && (
+        <div className="card elev-sm" style={{
+          marginBottom: 12, background: 'var(--color-accent-2-100)',
+          borderColor: 'var(--color-accent-2)', color: 'var(--color-accent-2-900)'
+        }}>
+          <strong style={{ fontFamily: 'var(--font-heading)' }}>Saved.</strong> {saved}
+        </div>
+      )}
       <form action={adminSetPick} className="card elev-md">
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'flex-end', width: '100%' }}>
         <label className="field" style={{ flex: '1 1 200px' }}>

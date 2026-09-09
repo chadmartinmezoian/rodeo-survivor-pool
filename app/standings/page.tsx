@@ -1,12 +1,17 @@
 import { getPool } from '@/lib/data';
 import { statusOf, sortForGrid, groupByStatus, weeksSurvived, STATUS_META } from '@/lib/survivor';
 import { TEAMS } from '@/lib/nfl';
+import { isLocked, deadlineLabel } from '@/lib/schedule';
 
 const cityOf = (code: string) => TEAMS.find(t => t.code === code)?.city ?? code;
 
 export default async function StandingsPage() {
-  const { settings, players } = await getPool();
-  const weeks = Array.from({ length: settings.current_week }, (_, i) => i + 1);
+  const { settings, players, week } = await getPool();
+  // Nobody sees this week's picks until the deadline passes — otherwise the
+  // late pickers just read the grid and fade the crowd. Past weeks stay open.
+  const revealed = isLocked(week);
+  const lastVisible = revealed ? settings.current_week : settings.current_week - 1;
+  const weeks = Array.from({ length: Math.max(lastVisible, 0) }, (_, i) => i + 1);
   const rows = sortForGrid(players);
   const g = groupByStatus(players);
 
@@ -28,6 +33,15 @@ export default async function StandingsPage() {
           </div>
         ))}
       </div>
+
+      {!revealed && (
+        <div className="card elev-sm" style={{ marginBottom: 16, borderColor: 'var(--color-accent-300)' }}>
+          <span className="card-kicker">Week {settings.current_week} is hidden</span>
+          <p className="card-body" style={{ margin: 0 }}>
+            This week's picks stay sealed until the deadline. {deadlineLabel(week)}.
+          </p>
+        </div>
+      )}
 
       <div className="scrollx card elev-md" style={{ padding: 12 }}>
         <table className="grid-t">

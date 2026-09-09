@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcryptjs';
 import { supabaseAdmin } from '@/lib/supabase/server';
+import { teamName } from '@/lib/nfl';
 import { createSession, clearSession, getSession } from '@/lib/session';
 import { getPool, getSettings, getWeek, getWeekGames } from '@/lib/data';
 import { isLocked } from '@/lib/schedule';
@@ -164,6 +165,14 @@ export async function adminSetPick(form: FormData) {
   }
   revalidatePath('/admin');
   revalidatePath('/standings');
+
+  // Send a receipt back to the page — without it the form looks like it did
+  // nothing and you click Save three more times.
+  const { data: who } = await db.from('players').select('name').eq('id', player_id).single();
+  const label = team
+    ? `${who?.name ?? 'Pick'} — ${teamName(team)}, week ${week}`
+    : `${who?.name ?? 'Pick'} — week ${week} pick cleared`;
+  redirect('/admin?saved=' + encodeURIComponent(label));
 }
 
 /** Results come from the schedule: set a game's winner and grading follows. */
