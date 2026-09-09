@@ -1,6 +1,6 @@
 /**
  * The 32 NFL teams. `code` is the storage key, `city` is what the pool grid
- * shows (matching the paper sheet), `name` is the full name for dropdowns.
+ * shows — the city, spelled out — and `name` is the full name for dropdowns.
  */
 export type Team = { code: string; name: string; city: string };
 
@@ -11,26 +11,26 @@ export const TEAMS: Team[] = [
   { code: 'BUF', name: 'Buffalo Bills',         city: 'BUFFALO' },
   { code: 'CAR', name: 'Carolina Panthers',     city: 'CAROLINA' },
   { code: 'CHI', name: 'Chicago Bears',         city: 'CHICAGO' },
-  { code: 'CIN', name: 'Cincinnati Bengals',    city: 'CINCY' },
+  { code: 'CIN', name: 'Cincinnati Bengals',    city: 'CINCINNATI' },
   { code: 'CLE', name: 'Cleveland Browns',      city: 'CLEVELAND' },
   { code: 'DAL', name: 'Dallas Cowboys',        city: 'DALLAS' },
   { code: 'DEN', name: 'Denver Broncos',        city: 'DENVER' },
   { code: 'DET', name: 'Detroit Lions',         city: 'DETROIT' },
   { code: 'GB',  name: 'Green Bay Packers',     city: 'GREEN BAY' },
   { code: 'HOU', name: 'Houston Texans',        city: 'HOUSTON' },
-  { code: 'IND', name: 'Indianapolis Colts',    city: 'INDY' },
-  { code: 'JAX', name: 'Jacksonville Jaguars',  city: 'JAX' },
-  { code: 'KC',  name: 'Kansas City Chiefs',    city: 'KC' },
-  { code: 'LV',  name: 'Las Vegas Raiders',     city: 'RAIDERS' },
-  { code: 'LAC', name: 'Los Angeles Chargers',  city: 'CHARGERS' },
-  { code: 'LAR', name: 'Los Angeles Rams',      city: 'RAMS' },
+  { code: 'IND', name: 'Indianapolis Colts',    city: 'INDIANAPOLIS' },
+  { code: 'JAX', name: 'Jacksonville Jaguars',  city: 'JACKSONVILLE' },
+  { code: 'KC',  name: 'Kansas City Chiefs',    city: 'KANSAS CITY' },
+  { code: 'LV',  name: 'Las Vegas Raiders',     city: 'LAS VEGAS' },
+  { code: 'LAC', name: 'Los Angeles Chargers',  city: 'LA CHARGERS' },
+  { code: 'LAR', name: 'Los Angeles Rams',      city: 'LA RAMS' },
   { code: 'MIA', name: 'Miami Dolphins',        city: 'MIAMI' },
   { code: 'MIN', name: 'Minnesota Vikings',     city: 'MINNESOTA' },
   { code: 'NE',  name: 'New England Patriots',  city: 'NEW ENGLAND' },
-  { code: 'NO',  name: 'New Orleans Saints',    city: 'SAINTS' },
-  { code: 'NYG', name: 'New York Giants',       city: 'GIANTS' },
-  { code: 'NYJ', name: 'New York Jets',         city: 'JETS' },
-  { code: 'PHI', name: 'Philadelphia Eagles',   city: 'PHILLY' },
+  { code: 'NO',  name: 'New Orleans Saints',    city: 'NEW ORLEANS' },
+  { code: 'NYG', name: 'New York Giants',       city: 'NY GIANTS' },
+  { code: 'NYJ', name: 'New York Jets',         city: 'NY JETS' },
+  { code: 'PHI', name: 'Philadelphia Eagles',   city: 'PHILADELPHIA' },
   { code: 'PIT', name: 'Pittsburgh Steelers',   city: 'PITTSBURGH' },
   { code: 'SF',  name: 'San Francisco 49ers',   city: 'SAN FRANCISCO' },
   { code: 'SEA', name: 'Seattle Seahawks',      city: 'SEATTLE' },
