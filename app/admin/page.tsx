@@ -38,13 +38,13 @@ export default async function AdminPage() {
           <span className="card-kicker">This week</span>
           <h2 style={{ margin: 0, fontSize: 22 }}>Week {settings.current_week}</h2>
           <p className="card-body" style={{ margin: 0 }}>{deadlineLabel(week)}</p>
-          <form action={setCurrentWeek} className="row" style={{ gap: 8, flexWrap: 'wrap' }}>
+          <form action={setCurrentWeek} style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
             <select name="week" className="input" defaultValue={settings.current_week} style={{ width: 120 }}>
               {weeks.map(w => <option key={w.week} value={w.week}>Week {w.week}</option>)}
             </select>
             <button className="btn btn-secondary">Set current week</button>
           </form>
-          <form action={setWeekFinal} className="row" style={{ gap: 8 }}>
+          <form action={setWeekFinal} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <input type="hidden" name="week" value={settings.current_week} />
             <input type="hidden" name="isFinal" value={String(!week?.is_final)} />
             <button className="btn btn-ghost">
@@ -97,17 +97,17 @@ export default async function AdminPage() {
         Set a winner and every pick for that game grades itself.
       </p>
       <div className="card elev-md" style={{ padding: 6 }}>
-        <table className="table">
+        <table className="table stack-table">
           <thead><tr><th>Game</th><th>Winner</th></tr></thead>
           <tbody>
             {games.length === 0 && <tr><td colSpan={2} className="text-muted">No games loaded for this week.</td></tr>}
             {games.map(g => (
               <tr key={g.id}>
-                <td>{teamName(g.away)} at {teamName(g.home)}</td>
-                <td>
+                <td data-label="Game">{teamName(g.away)} at {teamName(g.home)}</td>
+                <td data-label="Winner">
                   <form action={setGameWinner} className="row" style={{ gap: 6 }}>
                     <input type="hidden" name="gameId" value={g.id} />
-                    <select name="winner" className="input" defaultValue={g.is_tie ? 'TIE' : g.winner ?? ''} style={{ width: 190 }}>
+                    <select name="winner" className="input" defaultValue={g.is_tie ? 'TIE' : g.winner ?? ''} style={{ width: 190, maxWidth: '100%' }}>
                       <option value="">Not played</option>
                       <option value={g.away}>{teamName(g.away)}</option>
                       <option value={g.home}>{teamName(g.home)}</option>
@@ -126,7 +126,8 @@ export default async function AdminPage() {
       <p className="text-muted" style={{ fontSize: 13, marginTop: -8 }}>
         For the guy who texted you his pick. Any player, any week.
       </p>
-      <form action={adminSetPick} className="card elev-md row wrap" style={{ gap: 10, alignItems: 'flex-end' }}>
+      <form action={adminSetPick} className="card elev-md">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'flex-end', width: '100%' }}>
         <label className="field" style={{ flex: '1 1 200px' }}>
           <span style={{ display: 'block', fontSize: 12, marginBottom: 5, opacity: 0.7 }}>Player</span>
           <select name="playerId" className="input" required defaultValue="">
@@ -147,7 +148,8 @@ export default async function AdminPage() {
             {TEAMS.map(t => <option key={t.code} value={t.code}>{t.name}</option>)}
           </select>
         </label>
-        <button className="btn btn-primary">Save pick</button>
+        <button className="btn btn-primary" style={{ flex: '0 0 auto' }}>Save pick</button>
+        </div>
       </form>
 
       <h2 style={{ fontSize: 22, marginTop: 30 }}>Roster · {players.length} players</h2>
@@ -155,31 +157,33 @@ export default async function AdminPage() {
         Add, rename or remove anyone here. Editing a name keeps their picks.
       </p>
 
-      <form action={addPlayer} className="card elev-md row wrap" style={{ gap: 10, alignItems: 'flex-end' }}>
+      <form action={addPlayer} className="card elev-md">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'flex-end', width: '100%' }}>
         <label className="field" style={{ flex: '1 1 240px' }}>
           <span style={{ display: 'block', fontSize: 12, marginBottom: 5, opacity: 0.7 }}>Add a player</span>
           <input name="name" className="input" placeholder="First Last" required />
         </label>
-        <button className="btn btn-primary">Add to pool</button>
+        <button className="btn btn-primary" style={{ flex: '0 0 auto' }}>Add to pool</button>
+        </div>
       </form>
 
       <div className="card elev-md" style={{ padding: 6, marginTop: 18 }}>
-        <table className="table">
+        <table className="table stack-table">
           <thead><tr><th>Player</th><th>Status</th><th>Entry</th><th>Buyback</th><th>PIN</th><th /></tr></thead>
           <tbody>
             {players.map(p => (
               <tr key={p.id}>
-                <td>
+                <td data-label="Player">
                   <form action={renamePlayer} className="row" style={{ gap: 6 }}>
                     <input type="hidden" name="playerId" value={p.id} />
-                    <input name="name" className="input" defaultValue={p.name} style={{ width: 170, minHeight: 32 }} />
+                    <input name="name" className="input" defaultValue={p.name} style={{ width: 170, maxWidth: '100%', minHeight: 32 }} />
                     <button className="btn btn-ghost" style={{ fontSize: 12 }}>Save</button>
                   </form>
                 </td>
-                <td><span className={'tag ' + STATUS_META[statusOf(p)].cls}>{STATUS_META[statusOf(p)].label}</span></td>
-                <td>{p.entry_paid ? 'Paid' : <span className="text-muted">Owed</span>}</td>
-                <td>{p.buyback_status === 'used' ? (p.buyback_paid ? 'Paid' : 'Owed') : <span className="text-muted">{p.buyback_status}</span>}</td>
-                <td>
+                <td data-label="Status"><span className={'tag ' + STATUS_META[statusOf(p)].cls}>{STATUS_META[statusOf(p)].label}</span></td>
+                <td data-label="Entry">{p.entry_paid ? 'Paid' : <span className="text-muted">Owed</span>}</td>
+                <td data-label="Buyback">{p.buyback_status === 'used' ? (p.buyback_paid ? 'Paid' : 'Owed') : <span className="text-muted">{p.buyback_status}</span>}</td>
+                <td data-label="PIN">
                   {p.has_pin ? (
                     <form action={resetPin}>
                       <input type="hidden" name="playerId" value={p.id} />
