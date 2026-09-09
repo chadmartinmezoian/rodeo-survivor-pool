@@ -59,68 +59,12 @@ export default async function AdminPage({ searchParams }: { searchParams?: { sav
           <h2 style={{ margin: 0, fontSize: 22 }}>
             ${owing.reduce((s, x) => s + x.owed, 0)} outstanding
           </h2>
-          {owing.length === 0 ? (
-            <p className="card-body" style={{ margin: 0 }}>Everyone's square.</p>
-          ) : (
-            <div className="stack" style={{ gap: 8 }}>
-              {owing.map(({ p, owed }) => (
-                <div key={p.id} className="row wrap" style={{ gap: 8, justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: 14 }}>
-                    {p.name} <span className="text-muted">owes ${owed}</span>
-                  </span>
-                  <span className="row" style={{ gap: 6 }}>
-                    {!p.entry_paid && (
-                      <form action={togglePaid}>
-                        <input type="hidden" name="playerId" value={p.id} />
-                        <input type="hidden" name="field" value="entry_paid" />
-                        <input type="hidden" name="value" value="true" />
-                        <button className="btn btn-secondary" style={{ fontSize: 12 }}>Entry paid</button>
-                      </form>
-                    )}
-                    {p.buyback_status === 'used' && !p.buyback_paid && (
-                      <form action={togglePaid}>
-                        <input type="hidden" name="playerId" value={p.id} />
-                        <input type="hidden" name="field" value="buyback_paid" />
-                        <input type="hidden" name="value" value="true" />
-                        <button className="btn btn-secondary" style={{ fontSize: 12 }}>Buyback paid</button>
-                      </form>
-                    )}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+          <p className="card-body" style={{ margin: 0 }}>
+            {owing.length === 0
+              ? "Everyone's square."
+              : `${owing.length} ${owing.length === 1 ? 'player owes' : 'players owe'} — mark them paid in the roster below.`}
+          </p>
         </div>
-      </div>
-
-      <h2 style={{ fontSize: 22, marginTop: 30 }}>Week {settings.current_week} results</h2>
-      <p className="text-muted" style={{ fontSize: 13, marginTop: -8 }}>
-        Set a winner and every pick for that game grades itself.
-      </p>
-      <div className="card elev-md" style={{ padding: 6 }}>
-        <table className="table stack-table">
-          <thead><tr><th>Game</th><th>Winner</th></tr></thead>
-          <tbody>
-            {games.length === 0 && <tr><td colSpan={2} className="text-muted">No games loaded for this week.</td></tr>}
-            {games.map(g => (
-              <tr key={g.id}>
-                <td data-label="Game">{teamName(g.away)} at {teamName(g.home)}</td>
-                <td data-label="Winner">
-                  <form action={setGameWinner} className="row" style={{ gap: 6 }}>
-                    <input type="hidden" name="gameId" value={g.id} />
-                    <select name="winner" className="input" defaultValue={g.is_tie ? 'TIE' : g.winner ?? ''} style={{ width: 190, maxWidth: '100%' }}>
-                      <option value="">Not played</option>
-                      <option value={g.away}>{teamName(g.away)}</option>
-                      <option value={g.home}>{teamName(g.home)}</option>
-                      <option value="TIE">Tie</option>
-                    </select>
-                    <button className="btn btn-secondary" style={{ fontSize: 12 }}>Save</button>
-                  </form>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
 
       <h2 id="backfill" style={{ fontSize: 22, marginTop: 30, scrollMarginTop: 16 }}>Backfill a pick</h2>
@@ -160,6 +104,37 @@ export default async function AdminPage({ searchParams }: { searchParams?: { sav
         <button className="btn btn-primary" style={{ flex: '0 0 auto' }}>Save pick</button>
         </div>
       </form>
+
+      <h2 style={{ fontSize: 22, marginTop: 30 }}>Week {settings.current_week} results</h2>
+      <p className="text-muted" style={{ fontSize: 13, marginTop: -8 }}>
+        Set a winner and every pick for that game grades itself.
+      </p>
+      <div className="card elev-md" style={{ padding: 6 }}>
+        <table className="table stack-table">
+          <thead><tr><th>Game</th><th>Winner</th></tr></thead>
+          <tbody>
+            {games.length === 0 && <tr><td colSpan={2} className="text-muted">No games loaded for this week.</td></tr>}
+            {games.map(g => (
+              <tr key={g.id}>
+                <td data-label="Game">{teamName(g.away)} at {teamName(g.home)}</td>
+                <td data-label="Winner">
+                  <form action={setGameWinner} className="row" style={{ gap: 6 }}>
+                    <input type="hidden" name="gameId" value={g.id} />
+                    <select name="winner" className="input" defaultValue={g.is_tie ? 'TIE' : g.winner ?? ''} style={{ width: 190, maxWidth: '100%' }}>
+                      <option value="">Not played</option>
+                      <option value={g.away}>{teamName(g.away)}</option>
+                      <option value={g.home}>{teamName(g.home)}</option>
+                      <option value="TIE">Tie</option>
+                    </select>
+                    <button className="btn btn-secondary" style={{ fontSize: 12 }}>Save</button>
+                  </form>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
 
       <h2 style={{ fontSize: 22, marginTop: 30 }}>Roster · {players.length} players</h2>
       <p className="text-muted" style={{ fontSize: 13, marginTop: -8 }}>
