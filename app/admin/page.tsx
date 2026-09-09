@@ -123,7 +123,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: { sav
         </table>
       </div>
 
-      <h2 style={{ fontSize: 22, marginTop: 30 }}>Backfill a pick</h2>
+      <h2 id="backfill" style={{ fontSize: 22, marginTop: 30, scrollMarginTop: 16 }}>Backfill a pick</h2>
       <p className="text-muted" style={{ fontSize: 13, marginTop: -8 }}>
         For the guy who texted you his pick. Any player, any week.
       </p>

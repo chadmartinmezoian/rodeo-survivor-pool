@@ -172,7 +172,8 @@ export async function adminSetPick(form: FormData) {
   const label = team
     ? `${who?.name ?? 'Pick'} — ${teamName(team)}, week ${week}`
     : `${who?.name ?? 'Pick'} — week ${week} pick cleared`;
-  redirect('/admin?saved=' + encodeURIComponent(label));
+  // #backfill keeps the browser parked on the form instead of the page top.
+  redirect('/admin?saved=' + encodeURIComponent(label) + '#backfill');
 }
 
 /** Results come from the schedule: set a game's winner and grading follows. */
