@@ -6,6 +6,7 @@ import { deadlineLabel } from '@/lib/schedule';
 import { setCurrentWeek, togglePaid, setGameWinner, setWeekFinal, adminSetPick, addPlayer, renamePlayer, removePlayer, resetPin } from '../actions';
 import { TEAMS, teamName } from '@/lib/nfl';
 import PayDot from './PayDot';
+import BuybackCell from './BuybackCell';
 
 const COMMISSIONERS = ['Jason Bottoms', 'Chad Mezoian'];
 
@@ -170,9 +171,8 @@ export default async function AdminPage({ searchParams }: { searchParams?: { sav
                   <PayDot playerId={p.id} field="entry_paid" paid={p.entry_paid} label="Entry" />
                 </td>
                 <td data-label="Buyback">
-                  {p.buyback_status === 'used'
-                    ? <PayDot playerId={p.id} field="buyback_paid" paid={p.buyback_paid} label="Buyback" />
-                    : <span className="text-muted">{p.buyback_status}</span>}
+                  <BuybackCell playerId={p.id} status={p.buyback_status}
+                               paid={p.buyback_paid} eligible={statusOf(p) === 'buyback'} />
                 </td>
                 <td data-label="PIN">
                   {p.has_pin ? (

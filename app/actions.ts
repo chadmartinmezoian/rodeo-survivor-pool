@@ -146,6 +146,23 @@ export async function togglePaid(form: FormData) {
   revalidatePath('/admin');
 }
 
+/** Grant, decline or reset a buyback on a player's behalf — most of the group
+ *  will just text the commissioner rather than tapping the button themselves. */
+export async function adminSetBuyback(form: FormData) {
+  await requireCommissioner();
+  const id = String(form.get('playerId'));
+  const status = String(form.get('status'));
+  if (!['available', 'used', 'declined'].includes(status)) fail('Unknown buyback status.');
+  // Resetting to available clears any payment recorded against it.
+  const patch = status === 'used'
+    ? { buyback_status: status }
+    : { buyback_status: status, buyback_paid: false };
+  await supabaseAdmin().from('players').update(patch).eq('id', id);
+  revalidatePath('/admin');
+  revalidatePath('/');
+  revalidatePath('/standings');
+}
+
 /** Backfill or correct any player's pick for any week. */
 export async function adminSetPick(form: FormData) {
   await requireCommissioner();

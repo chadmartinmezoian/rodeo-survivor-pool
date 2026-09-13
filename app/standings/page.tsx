@@ -14,18 +14,22 @@ export default async function StandingsPage() {
   const weeks = Array.from({ length: Math.max(lastVisible, 0) }, (_, i) => i + 1);
   const rows = sortForGrid(players);
   const g = groupByStatus(players);
+  // groupByStatus folds one-loss players into "alive" — true by the rules, but
+  // on the grid their cell is red and the header read "0 eliminated", which
+  // looks broken. Count them on their own line instead.
+  const byStatus = (s: string) => players.filter(p => statusOf(p) === s).length;
 
   return (
     <div style={{ paddingTop: 26 }}>
-      <p className="kicker" style={{ color: 'var(--color-accent-300)', margin: 0 }}>The sheet</p>
+      <p className="kicker" style={{ color: 'var(--color-accent-300)', margin: 0 }}>The sheet · Week {settings.current_week}</p>
       <h1 style={{ margin: '4px 0 18px' }}>Picks Grid</h1>
 
       <div className="grid-cards cols-4" style={{ marginBottom: 24 }}>
         {[
-          ['Still alive', g.alive.length],
+          ['Still alive', byStatus('alive')],
+          ['Took a loss', byStatus('buyback')],
           ['Second life', g.second.length],
-          ['Eliminated', g.eliminated.length],
-          ['Week', settings.current_week]
+          ['Eliminated', g.eliminated.length]
         ].map(([label, n]) => (
           <div key={String(label)} className="card elev-sm">
             <div className="bignum">{n}</div>
@@ -44,7 +48,10 @@ export default async function StandingsPage() {
       )}
 
       <div className="scrollx card elev-md" style={{ padding: 12 }}>
-        <table className="grid-t">
+        {/* Early in the season the full city names fit on a phone; once the
+            grid gets wide they'd force a long sideways scroll, so past week 6
+            phones fall back to the 3-letter codes. */}
+        <table className={'grid-t' + (weeks.length > 6 ? ' compact' : '')}>
           <thead>
             <tr>
               <th className="n">Player</th>
