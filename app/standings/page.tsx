@@ -1,4 +1,5 @@
 import { getPool } from '@/lib/data';
+import { getSession } from '@/lib/session';
 import { statusOf, sortForGrid, groupByStatus, weeksSurvived, STATUS_META } from '@/lib/survivor';
 import { TEAMS } from '@/lib/nfl';
 import { isLocked, deadlineLabel } from '@/lib/schedule';
@@ -6,10 +7,13 @@ import { isLocked, deadlineLabel } from '@/lib/schedule';
 const cityOf = (code: string) => TEAMS.find(t => t.code === code)?.city ?? code;
 
 export default async function StandingsPage() {
+  const session = await getSession();
   const { settings, players, week } = await getPool();
-  // Nobody sees this week's picks until the deadline passes — otherwise the
-  // late pickers just read the grid and fade the crowd. Past weeks stay open.
-  const revealed = isLocked(week);
+  const viewer = players.find(p => p.id === session?.playerId);
+  // Only Chad can view the current week's picks before the deadline.
+  // Resolve identity from the signed session's player ID and the database.
+  const isChad = viewer?.name === 'Chad Mezoian' && viewer.is_commissioner;
+  const revealed = isLocked(week) || isChad;
   const lastVisible = revealed ? settings.current_week : settings.current_week - 1;
   const weeks = Array.from({ length: Math.max(lastVisible, 0) }, (_, i) => i + 1);
   const rows = sortForGrid(players);
@@ -37,6 +41,15 @@ export default async function StandingsPage() {
           </div>
         ))}
       </div>
+
+      {isChad && !isLocked(week) && (
+        <div className="card elev-sm" style={{ marginBottom: 16, borderColor: 'var(--color-accent-300)' }}>
+          <span className="card-kicker">Commissioner preview</span>
+          <p className="card-body" style={{ margin: 0 }}>
+            You can see Week {settings.current_week} picks early. They remain hidden from everyone else until {deadlineLabel(week).toLowerCase()}.
+          </p>
+        </div>
+      )}
 
       {!revealed && (
         <div className="card elev-sm" style={{ marginBottom: 16, borderColor: 'var(--color-accent-300)' }}>
