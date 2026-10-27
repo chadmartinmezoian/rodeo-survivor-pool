@@ -165,11 +165,19 @@ export async function adminSetBuyback(form: FormData) {
 
 /** Backfill or correct any player's pick for any week. */
 export async function adminSetPick(form: FormData) {
-  await requireCommissioner();
+  const session = await requireCommissioner();
   const player_id = String(form.get('playerId'));
   const week = Number(form.get('week'));
   const team = String(form.get('team'));
   const db = supabaseAdmin();
+  const settings = await getSettings();
+  if (!Number.isInteger(week) || week < 1 || week > settings.total_weeks) fail('Invalid week.');
+  if (week !== settings.current_week) {
+    const { data: actor } = await db.from('players').select('name').eq('id', session.playerId).single();
+    if (actor?.name !== 'Chad Mezoian' || week > settings.current_week) {
+      fail('Only Chad Mezoian can backfill previous weeks.');
+    }
+  }
 
   if (!team) {
     await db.from('picks').delete().eq('player_id', player_id).eq('week', week);
